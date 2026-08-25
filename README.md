@@ -5,30 +5,7 @@
 ## 📌 Project Overview
 This project presents an end-to-end simulation of a resilient, secure, and highly available Enterprise Network Architecture designed in **EVE-NG**. 
 
-The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch Office** running **EIGRP**, an overlay **DMVPN GRE Tunnel over IPsec** for inter-site WAN security, and **Multi-Homed eBGP** connections across three independent Autonomous Systems (AS610, AS620, AS630).
-
----
-
-## 🏗️ Architecture & Topology Breakdown
-
-### 🏬 Headquarters (HQ) Domain — AS600
-- **IGP**: OSPF for core internal routing between Core/Distribution Switches and HQ Edge Router.
-- **VLAN & Subnet Plan**:
-  - `VLAN 10`: `192.168.10.0/24` (Data Host 1)
-  - `VLAN 20`: `192.168.20.0/24` (Data Host 2)
-  - `VLAN 30`: `192.168.30.0/24` (Data Host 3)
-  - `VLAN 100`: `192.168.100.0/24` (Central Services / HQ DHCP Server)
-
-### 🏢 Branch Office Domain — AS601
-- **IGP**: EIGRP for internal routing within the branch distribution and access layers.
-- **VLAN & Subnet Plan**:
-  - `VLAN 10`: `192.168.110.0/24` (Branch Host 1)
-  - `VLAN 20`: `192.168.120.0/24` (Branch Host 2)
-  - `VLAN 30`: `192.168.130.0/24` (Branch Host 3)
-  - `VLAN 101`: `192.168.101.0/24` (Branch DHCP Server)
-
-### 🔒 Secure WAN Overlay
-- **DMVPN GRE Tunnel over IPsec**: Secure site-to-site connectivity interconnecting `HQ-Router` and `Branch-Router` over untrusted public ISP infrastructure.
+The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch Office** running **EIGRP**, an overlay **DMVPN GRE Tunnel over IPsec** for inter-site WAN security, and **Multi-Homed eBGP** connections across three independent Autonomous Systems (AS610, AS620, AS630)
 
 ---
 
