@@ -6,10 +6,10 @@
 ### VLAN and Subnet Plan
 | VLAN | Subnet | Role / Description |
 | :--- | :--- | :--- |
-| **VLAN 10** | `192.168.10.0/24` | Data Host 1 |
-| **VLAN 20** | `192.168.20.0/24` | Data Host 2 |
-| **VLAN 30** | `192.168.30.0/24` | Data Host 3 |
-| **VLAN 100** | `192.168.100.0/24` | Central Services HQ DHCP Server |
+| **VLAN 10** | `192.168.10.0/24` | HQ Host 1 |
+| **VLAN 20** | `192.168.20.0/24` | HQ Host 2 |
+| **VLAN 30** | `192.168.30.0/24` | HQ Host 3 |
+| **VLAN 100** | `192.168.100.0/24` | HQ DHCP Server |
 
 ---
 
