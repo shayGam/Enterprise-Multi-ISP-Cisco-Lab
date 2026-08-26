@@ -17,7 +17,6 @@ Because both Core-facing interfaces were configured with classic NAT (`ip nat in
 1. Workaround: OSPF ECMP Suppression (Lab / Testing)
 • Implementation: Applied `maximum-paths 1` under the OSPF routing process on the HQ router.
 • Result: Forced a single best path into the RIB, eliminating asymmetry and restoring bidirectional connectivity.
-• Note: Not recommended for production as it disables load distribution and degrades link utilization.
 
 2. EIGRP Optimization (Active/Standby Path Control)
 • Implementation: Increased interface delay on the secondary link (`interface Ethernet0/0` -> `delay 1000`).
