@@ -33,7 +33,7 @@ Because **NAT State Overload** (`ip nat inside`) was configured on the Core-faci
 * **Implementation:** Increased the delay on the secondary interface (`interface Ethernet0/0` -> `delay 1000`) from its default value of `100` (1,000 µs).
 * **Result:**
   * `Ethernet0/1` became the sole **Successor** in the routing table (`show ip route eigrp`), resolving asymmetric routing.
-  * `Ethernet0/0` remained in the topology table as a **Feasible Successor** (satisfying $\text{RD} < \text{FD}$), guaranteeing instant zero-delay failover if the primary link drops.
+  * `Ethernet0/0` remained in the topology table as a **Feasible Successor** (satisfying RD < FD), guaranteeing instant zero-delay failover if the primary link drops.
 
 ### 3. Production Enterprise Best Practices
 * **NVI / NAT Enable:** Replaced legacy `ip nat inside/outside` commands with **NVI (`ip nat enable`)**, which decouples translation decisions from specific interface pairs and translates traffic only when egressing toward the WAN.
