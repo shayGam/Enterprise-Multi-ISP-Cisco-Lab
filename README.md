@@ -46,6 +46,14 @@ To keep the overview concise, the complete low-level engineering specifications,
 * 📊 **[Addressing & VLAN Plan](Address&Routing/Addressing&Routing.md)** – Comprehensive subnet tables for HQ LAN, Branch LAN, and WAN point-to-point links.
 
 ---
+
+## 🔍 Infrastructure Verification & Validation
+
+To review the live state validation of the network control plane, DMVPN overlay, security associations, and high-availability tracking, please refer to the complete verification document:
+
+[![Verification Guide](https://img.shields.io/badge/Documentation-Verification_Guide-blue?style=for-the-badge&logo=read-the-docs&logoColor=white)](Verifications/Verifications.md)
+
+---
 ## 🛡️ Access Layer & Layer 2 Security (Access Switches)
 
 ### 1. Advanced L2 Attack Mitigation
