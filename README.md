@@ -1,6 +1,6 @@
 # 🌐 Enterprise Multi-Site & Multi-ISP Cisco Network Architecture
 
-![Network Topology](./Topology/Screenshot 2026-08-24 171200.png)
+![Network Topology](./Screenshot 2026-08-24 171200.png)
 
 ## 📌 Project Overview
 This project presents an end-to-end simulation of a resilient, secure, and highly available Enterprise Network Architecture designed in **EVE-NG**. 
