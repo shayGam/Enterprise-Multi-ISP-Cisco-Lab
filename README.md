@@ -44,7 +44,7 @@ Key engineering goals guiding the architectural choices in this deployment:
 To keep the overview concise, the complete low-level engineering specifications, subnet allocations, and failover design parameters have been segmented into dedicated architectural documents:
 
 * 📊 **[Addressing & VLAN Plan](Address&Routing/Addressing&Routing.md)** – Comprehensive subnet tables for HQ LAN, Branch LAN, and WAN point-to-point links.
-
+* 🔄 **[NAT Failover Trobuleshooting](trobuleshoot/trobuleshooting.md)** – Detailed analysis and resolution for asymmetric routing and NAT drops.
 ---
 ## 🛡️ Access Layer & Layer 2 Security (Access Switches)
 
