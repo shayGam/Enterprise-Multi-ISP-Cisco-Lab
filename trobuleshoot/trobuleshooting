@@ -1,40 +1,36 @@
-# 🛠️ Troubleshooting: Asymmetric Routing & NAT Conflict
+# 🛠️ Network Troubleshooting: Asymmetric Routing & NAT State Conflict
 
 ## 📋 Problem Description
-During the implementation of redundancy and load balancing between the Distribution/Core layer and the HQ/Edge router, **ECMP (Equal-Cost Multi-Path)** was enabled via the dynamic routing protocol.
+During the implementation of redundancy and load balancing between the Distribution/Core layer and the HQ/Edge router, **Equal-Cost Multi-Path (ECMP)** was enabled via the dynamic routing protocol.
 
-As a result, internal traffic (such as ICMP pings targeting the router interface `10.0.0.1`) experienced **Asymmetric Routing**:
-* The outbound packet left via one interface (`Ethernet0/0`).
-* The return packet (Reply) arrived via a parallel interface (`Ethernet0/1`).
+As a result, internal traffic (e.g., ICMP pings targeting the router interface `10.0.0.1`) experienced **Asymmetric Routing**:
+* **Outbound path:** Packets exited via interface `Ethernet0/0`.
+* **Inbound path:** Return packets (Echo Reply) arrived via interface `Ethernet0/1`.
 
-Because **NAT State Overload** (`ip nat inside`) was configured on the Core-facing interfaces, the Cisco IOS/IOL router identified packets arriving on one `Inside` interface and returning on another as lacking a valid state entry in the translation table, causing **packet drops**.
+Because **Stateful NAT Overload** (`ip nat inside`) was configured on both Core-facing interfaces, Cisco IOS dropped the asymmetric return traffic due to a missing translation state entry for the second interface.
 
 ---
 
 ## 🔍 Root Cause Analysis (RCA)
 
-1. **NAT Layer Inspection:**
-   * Analyzing the translation table using `show ip nat translations` revealed active PAT entries for ICMP, but return packets were not being successfully matched or forwarded back to the host.
-2. **Routing Table Inspection:**
-   * Checking `show ip route` confirmed two equal-cost paths to each internal subnet via interfaces `e0/0` and `e0/1`.
+1. **NAT State Inspection:**
+   * Running `show ip nat translations` confirmed active PAT entries for ICMP, but returning packets arriving on the secondary interface failed state lookup and were dropped.
+2. **Routing Table Verification:**
+   * Executing `show ip route` revealed two equal-cost paths to internal subnets via interfaces `e0/0` and `e0/1`.
 3. **Cisco IOS Order of Operations:**
-   * The router attempted to track stateful NAT decisions within the Core topology due to `ip nat inside` being assigned to both interfaces. Asymmetric routing broke the state consistency required by the classic NAT module.
+   * Traditional Cisco IOS NAT (`ip nat inside/outside`) binds state enforcement to specific interface pairs. Asymmetric pathing invalidates the expected state lookup on ingress.
 
 ---
 
 ## 💡 Mitigations & Solutions Applied
 
-### 1. Workaround: OSPF ECMP Suppression (Lab Environment)
-* **Implementation:** Configured `maximum-paths 1` under the OSPF process on the HQ router.
-* **Result:** Forced the router to install a single path in the RIB, eliminating asymmetric routing and restoring full connectivity.
-* **Architectural Note:** Not recommended for production environments, as it disables load balancing and degrades link utilization.
+### 1. Lab Workaround: OSPF ECMP Suppression
+* **Implementation:** Configured `maximum-paths 1` under the OSPF routing process.
+* **Result:** Forced the router to install a single active route in the RIB, eliminating asymmetry.
+* **Architectural Note:** Suitable for lab/testing environments only. Disabled in production due to lack of link load sharing.
 
-### 2. EIGRP Optimization (Engineering Active/Standby Solution)
-* **Implementation:** Increased the delay on the secondary interface (`interface Ethernet0/0` -> `delay 1000`) from its default value of `100` (1,000 µs).
-* **Result:**
-  * `Ethernet0/1` became the sole **Successor** in the routing table (`show ip route eigrp`), resolving asymmetric routing.
-  * `Ethernet0/0` remained in the topology table as a **Feasible Successor** (satisfying RD < FD), guaranteeing instant zero-delay failover if the primary link drops.
-
-### 3. Production Enterprise Best Practices
-* **NVI / NAT Enable:** Replaced legacy `ip nat inside/outside` commands with **NVI (`ip nat enable`)**, which decouples translation decisions from specific interface pairs and translates traffic only when egressing toward the WAN.
-* **Architectural Segmentation:** Offloaded NAT functionality to a dedicated Edge router or a Firewall cluster featuring **State Synchronization**, leaving the internal Core/Distribution domain pure L3.
+### 2. EIGRP Optimization (Active/Standby Pathing)
+* **Implementation:** Adjusted link metric by increasing interface delay on the secondary link:
+  ```cisconetconf
+  interface Ethernet0/0
+   delay 1000
