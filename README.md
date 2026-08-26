@@ -1,12 +1,11 @@
 # 🌐 Enterprise Multi-Site & Multi-ISP Cisco Network Architecture
 
-![Network Topology](./Topology/topology.png)
-
 ## 📌 Project Overview
 This project presents an end-to-end simulation of a resilient, secure, and highly available Enterprise Network Architecture designed in **EVE-NG**. 
 
 The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch Office** running **EIGRP**, an overlay **DMVPN GRE Tunnel over IPsec** for inter-site WAN security, and **Multi-Homed eBGP** connections across three independent Autonomous Systems (AS610, AS620, AS630)
 
+![Network Topology](./Topology/topology.png)
 ---
 
 ## 🛡️ Access Layer & Layer 2 Security (Access Switches)
