@@ -7,7 +7,46 @@ The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch
 
 ![Network Topology](./Topology/topology.png)
 ---
+## 🚀 Architectural Highlights
 
+A comprehensive breakdown of the core infrastructure design and protocols:
+
+* **Network Topology:** Centralized HQ connected to a fault-tolerant Remote Branch.
+* **WAN Edge Connectivity:** Dual-homed ISP connections supporting active/backup path redundancy.
+* **Encrypted Overlays:** DMVPN Phase 3 with tunnel configuration for secure site-to-site transport.
+* **Underlay Routing:** External BGP (eBGP) peering established across public service providers.
+* **Overlay Routing:** static routes running over DMVPN tunnels for internal WAN route propagation.
+* **Branch Core & Distribution:** EIGRP powering the internal Branch backbone (AS-601).
+* **Protocol Redistribution:** Bidirectional route redistribution secured with Route-Maps and Route-Tags to prevent routing loops.
+* **Gateway Redundancy:** VRRP and HSRP configured at the HQ and Branch Distribution layer for seamless default gateway failover.
+* **Layer 2 Infrastructure:** Rapid PVST+ paired with LACP & PAgP EtherChannel for link aggregation and loop-free switching.
+* **Proactive SLA Tracking:** IP SLA combined with Object Tracking to monitor link performance and trigger automated failovers.
+* **Edge Security & NAT:** Route-Map guided Policy-Based Port Address Translation (PAT).
+* **Switchport Hardening:** Layer 2 defense mechanisms mitigating DHCP rogue attacks, ARP spoofing, and untrusted access.
+
+---
+
+## 🎯 Design Objectives
+
+Key engineering goals guiding the architectural choices in this deployment:
+
+* **High Availability:** Elimination of single points of failure across all Layer 2 and Layer 3 paths.
+* **Automated WAN Failover:** Instant, hands-free traffic rerouting upon primary circuit degradation or outage.
+* **Predictable Convergence:** Fast and deterministic network convergence during link or node disruptions.
+* **Robust Campus Hardening:** Strict Layer 2 mitigation using DHCP Snooping, Dynamic ARP Inspection (DAI), and Port Security.
+* **Scalable Architecture:** Modular DMVPN framework built for frictionless branch onboarding in the future.
+* **Routing Isolation:** Clean separation between SP-facing eBGP sessions and internal enterprise routing domains
+
+---
+
+## 🛠️ Detailed Technical Documentation
+
+To keep the overview concise, the complete low-level engineering specifications, subnet allocations, and failover design parameters have been segmented into dedicated architectural documents:
+
+* 📊 **[Addressing & VLAN Plan](Address&Routing/Addressing&Routing.md)** – Comprehensive subnet tables for HQ LAN, Branch LAN, and WAN point-to-point links.
+* 🔄 **[WAN Path Selection & Failover Matrix](docs/addressing-and-routing.md#-wan-path-selection--failover-matrix)** – Detailed logic covering IP SLA configuration, Object Tracking, and eBGP/OSPF convergence behaviors during link failures.
+
+---
 ## 🛡️ Access Layer & Layer 2 Security (Access Switches)
 
 ### 1. Advanced L2 Attack Mitigation
@@ -26,7 +65,6 @@ The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch
 ### 3. Trunk Security & Infrastructure Protection
 - **Native VLAN Hardening**: Changed the default Native VLAN from `VLAN 1` to an unused isolated VLAN (`VLAN 999`) to prevent Double-Tagging VLAN Hopping attacks.
 - **DTP Mitigation**: Disabled Dynamic Trunking Protocol using `switchport nonegotiate` to eliminate DTP spoofing vulnerabilities.
-- **Pruning & Port Hygiene**: Restricted trunk traffic using explicit `allowed vlan` statements. Unused ports are administratively disabled (`shutdown`) and assigned to a blackhole VLAN.
 
 ---
 
@@ -45,7 +83,6 @@ The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch
 - **DHCP Relay & Exclusion**:
   - Excluded statically assigned IP pools (e.g., Gateways, VRRP VIPs) via `ip dhcp excluded-address`.
   - Configured `ip helper-address` on SVIs to convert Layer 2 DHCP Broadcasts into Layer 3 Unicast traffic destined for central DHCP servers.
-- **uRPF (Unicast Reverse Path Forwarding)**: Configured Layer 3 source verification against the routing table to discard spoofed IP packets.
 
 ---
 
@@ -70,7 +107,7 @@ The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch
 ---
 
 ## 🛠️ Technologies & Tools
-- **Simulation**: EVE-NG
+- **Simulation**: EVE-NG, Debug, Wireshark
 - **Network OS**: Cisco IOS / IOS-XE
 - **Protocols**: eBGP, OSPF, EIGRP, DMVPN, IPsec, GRE, HSRP, VRRP, LACP, STP, Rapid-PVST
-- **Security Protocols**: DHCP Snooping, DAI, IPSG, Port Security, BPDU Guard, uRPF, PAT
+- **Security Protocols**: DHCP Snooping, DAI, IPSG, Port Security, BPDU Guard, , NAT/PAT
