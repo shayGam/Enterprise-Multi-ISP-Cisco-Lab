@@ -41,7 +41,7 @@ Key engineering goals guiding the architectural choices in this deployment:
 
 ## 🛠️ Detailed Technical Documentation
 
-To keep the overview concise, the complete low-level engineering specifications, subnet allocations, and failover design parameters have been segmented into dedicated architectural documents:
+To keep the overview concise, the complete low-level engineering specifications, subnet allocations, have been segmented into dedicated architectural document:
 
 * 📊 **[Addressing & VLAN Plan](Address&Routing/Addressing&Routing.md)** – Comprehensive subnet tables for HQ LAN, Branch LAN, and WAN point-to-point links.
 
