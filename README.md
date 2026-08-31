@@ -5,7 +5,7 @@ This project presents an end-to-end simulation of a resilient, secure, and highl
 
 The network spans a corporate **Headquarters (HQ)** running **OSPF**, a **Branch Office** running **EIGRP**, an overlay **DMVPN GRE Tunnel over IPsec** for inter-site WAN security, and **Multi-Homed eBGP** connections across three independent Autonomous Systems (AS610, AS620, AS630)
 
-![Network Topology](./Topology/topology.png)
+![Network Topology](./Topology/Topolo.png)
 ---
 ## 🚀 Architectural Highlights
 
